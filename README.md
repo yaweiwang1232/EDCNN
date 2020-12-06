@@ -35,12 +35,12 @@ python edcnn.py [-h] [--posi <postive_sequecne_file>] <br>
 # Use case:
 Take ALKBH5 as an example, if you want to predict the binding sites for RBP ALKBH5 using local and global CNNs <br>
 # step 1:
-1. python edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --nega=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.negatives.fa --model_type=CNN --model_file=model.pkl --train=True 
+1. python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --nega=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.negatives.fa --model_type=CNN --model_file=model.pkl --train=True 
 <br>
 Our propose EDCNN will save 'best.model.pkl.local' and 'best.model.pkl.global' for local and global CNNs, respectively.<br>
 
 # step 2:
-2. python edcnn.py --testfile=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --model_type=CNN --model_file=model.pkl --predict=True 
+2. python3 edcnn.py --testfile=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --model_type=CNN --model_file=model.pkl --predict=True 
 <br>
 predict step
 
@@ -48,7 +48,7 @@ predict step
 You need install WebLogo (http://weblogo.berkeley.edu/) and TOMTOM in MEME Suite(http://meme-suite.org/doc/download.html?man_type=web) to search identifyed motifs against known motifs of RBPs. And also you need has positive and negative sequences when using motif option. <br> 
 <br>
 # step 3:
-3. python ideepe.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --model_type=CNN --model_file=model.pkl --motif=True --motif_dir=motifs
+3. python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --model_type=CNN --model_file=model.pkl --motif=True --motif_dir=motifs
 # Calculate the mean values of AUCs
 
 The identified motifs (PWMs, and Weblogo) are saved to be defaulted dir motifs (you can also use --motif_dir to configure your dir for motifs), and also include the report from TOMTOM.
