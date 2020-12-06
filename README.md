@@ -42,14 +42,13 @@ Our propose EDCNN will save 'best.model.pkl.local' and 'best.model.pkl.global' f
 # step 2:
 2. python3 edcnn.py --testfile=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --model_type=CNN --model_file=model.pkl --predict=True 
 <br>
-predict step
+Predict step, calculate the mean AUCs of 24.
 
 # Identify motifs:
 You need install WebLogo (http://weblogo.berkeley.edu/) and TOMTOM in MEME Suite(http://meme-suite.org/doc/download.html?man_type=web) to search identifyed motifs against known motifs of RBPs. And also you need has positive and negative sequences when using motif option. <br> 
 <br>
 # step 3:
 3. python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --model_type=CNN --model_file=model.pkl --motif=True --motif_dir=motifs
-# Calculate the mean values of AUCs
 
 The identified motifs (PWMs, and Weblogo) are saved to be defaulted dir motifs (you can also use --motif_dir to configure your dir for motifs), and also include the report from TOMTOM.
 
