@@ -40,7 +40,7 @@ Take ALKBH5 as an example, if you want to predict the binding sites for RBP ALKB
 Our propose EDCNN will save 'best.model.pkl.local' and 'best.model.pkl.global' for local and global CNNs, respectively.<br>
 
 # step 2:
-2. python3 edcnn.py --testfile=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --model_type=CNN --model_file=model.pkl --predict=True 
+2. python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --nega=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.negatives.fa --model_type=CNN --model_file=model.pkl --predict=True 
 <br>
 Predict step, calculate the mean AUCs of 24.
 
