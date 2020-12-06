@@ -10,3 +10,4 @@ optimize RNA binding events. To demonstrate the effectiveness of EDCNN, 24 large
 measure their performance. The experimental results reveal that EDCNN can provide superior performance against other
 state-of-the-art methods. Furthermore, time complexity analysis, parameter analysis, motif analysis are conducted to demonstrate the
 roubstness of our proposed algorithm from different perspectives.
+#Dependency:
