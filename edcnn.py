@@ -1,4 +1,3 @@
-# fitness是esgd论文里的validation set，这样更好一些
 import sys
 from collections import OrderedDict
 import shutil, os
@@ -12,6 +11,7 @@ import gc
 
 from sklearn import metrics
 from matplotlib.font_manager import FontProperties
+
 font = FontProperties(fname="/home/wangyawei/SIMHEI.TTF", size=14)
 
 import matplotlib.pylab as plt
@@ -214,8 +214,8 @@ class CNN_LSTM(nn.Module):
         return temp[:, 1]
 
 
-net1 = CNN(nb_filter=16, labcounts=4, window_size=113, channel=1)
-net2 = CNN(nb_filter=16, labcounts=4, window_size=113, channel=7)
+net1 = CNN(nb_filter=16, labcounts=4, window_size=507, channel=1)
+net2 = CNN(nb_filter=16, labcounts=4, window_size=107, channel=7)
 
 EPOCH = 160
 pre_epoch = 0
@@ -275,7 +275,7 @@ def recombin_mutate(toolbox, ind, ind1, ind2):
     return ind
 
 
-def evalESGD(ind, X, y, batch_size=32):
+def evalFitness(ind, X, y, batch_size=32):
     y_pred = ind.predict(X)
 
     y_v = Variable(torch.from_numpy(y).long(), requires_grad=False)
@@ -330,7 +330,7 @@ toolbox.register("mutate", tools.mutGaussian, 0, 0.01, indpb=0.05)
 toolbox.register("select", tools.selTournament, tournsize=1)
 # 可以设置多个目标，
 
-toolbox.register("evaluate", evalESGD)
+toolbox.register("evaluate", evalFitness)
 
 
 def cpy(x, y):
@@ -1089,40 +1089,44 @@ def train_network(model_type, X_train, y_train, channel=7, window_size=107, mode
 
     if cuda:
         model = model.cuda()
-    clf = Estimator(model)
-    #learning_rate1 = random.uniform(0.00009, 0.00011)
-    rand = random.random()
-    lr1 = random.uniform(0.1,1)
-    lr2 = random.uniform(1e-3,1e-2)
-    lr3 = random.uniform(1e-4,1e-3)
-    mt = random.uniform(0.9,0.99)
-    # lr1 = 1
-    # lr2 = 1e-3
-    # lr3 = 1e-4
-    wd=random.uniform(1e-5,1e-4)
-    if rand < 0.2:
-        clf.compile(optimizer=torch.optim.SGD(model.parameters(), lr=lr2, momentum=mt, weight_decay=wd),
-                    loss=nn.CrossEntropyLoss())
-    elif rand < 0.3:
-        clf.compile(optimizer=torch.optim.Adagrad(model.parameters(), lr=lr2, weight_decay=wd),
-                    loss=nn.CrossEntropyLoss())#1e-2,lr3 work
-    elif rand < 0.5:
-        clf.compile(optimizer=torch.optim.RMSprop(model.parameters(), lr=lr3, weight_decay=wd),
-                    loss=nn.CrossEntropyLoss())#1e-2,1e-3 not juge,1e-4 work
-    elif rand < 0.7:
-        clf.compile(optimizer=torch.optim.Adadelta(model.parameters(), lr=lr1, weight_decay=wd),
-                    loss=nn.CrossEntropyLoss())#la ji youhuaqi
-    elif rand < 0.8:
-        clf.compile(optimizer=torch.optim.Adamax(model.parameters(), lr=lr3, weight_decay=wd),
-                    loss=nn.CrossEntropyLoss())# 2e-3, not juge,1e-4 work
+    model.eval()
+    if motif and channel == 1:
+        detect_motifs(model, motif_seqs, X_train, motif_outdir)
     else:
-        clf.compile(optimizer=torch.optim.Adam(model.parameters(), lr=lr3, weight_decay=wd),
-                    loss=nn.CrossEntropyLoss())# 1e-3,1e-4 work
-    clf.fit(X_train, y_train, batch_size=batch_size, nb_epoch=5)
-    torch.save(model.state_dict(), model_file)
-    model = model.cpu()
-    torch.cuda.empty_cache()
-    return model
+        clf = Estimator(model)
+        # learning_rate1 = random.uniform(0.00009, 0.00011)
+        rand = random.random()
+        lr1 = random.uniform(0.1, 1)
+        lr2 = random.uniform(1e-3, 1e-2)
+        lr3 = random.uniform(1e-4, 1e-3)
+        mt = random.uniform(0.9, 0.99)
+        # lr1 = 1
+        # lr2 = 1e-3
+        # lr3 = 1e-4
+        wd = random.uniform(1e-5, 1e-4)
+        if rand < 0.2:
+            clf.compile(optimizer=torch.optim.SGD(model.parameters(), lr=lr2, momentum=mt, weight_decay=wd),
+                        loss=nn.CrossEntropyLoss())
+        elif rand < 0.3:
+            clf.compile(optimizer=torch.optim.Adagrad(model.parameters(), lr=lr2, weight_decay=wd),
+                        loss=nn.CrossEntropyLoss())  # 1e-2,lr3 work
+        elif rand < 0.5:
+            clf.compile(optimizer=torch.optim.RMSprop(model.parameters(), lr=lr3, momentum=mt, weight_decay=wd),
+                        loss=nn.CrossEntropyLoss())  # 1e-2,1e-3 not juge,1e-4 work
+        elif rand < 0.7:
+            clf.compile(optimizer=torch.optim.Adadelta(model.parameters(), lr=lr1, weight_decay=wd),
+                        loss=nn.CrossEntropyLoss())  # la ji youhuaqi
+        elif rand < 0.8:
+            clf.compile(optimizer=torch.optim.Adamax(model.parameters(), lr=lr3, weight_decay=wd),
+                        loss=nn.CrossEntropyLoss())  # 2e-3, not juge,1e-4 work
+        else:
+            clf.compile(optimizer=torch.optim.Adam(model.parameters(), lr=lr3, weight_decay=wd),
+                        loss=nn.CrossEntropyLoss())  # 1e-3,1e-4 work
+        clf.fit(X_train, y_train, batch_size=batch_size, nb_epoch=5)
+        torch.save(model.state_dict(), "tmp" + model_file)
+        model = model.cpu()
+        torch.cuda.empty_cache()
+        return model
     # print('predicting')
     # pred = model.predict_proba(test_bags)
     # return model,auc1
@@ -1213,6 +1217,7 @@ def predict_networker(model_type, X_test, channel=7, window_size=107, individual
     del model
     gc.collect()
     return pred
+
 
 def readname1():
     # filePath = 'C:\\Users\\wangyawei\\Desktop\\iDeepE-master\\GraphProt_CLIP_sequences\\'
@@ -1326,10 +1331,10 @@ def run_ideepe(parser):
 
                         train_bags2, train_labels2 = get_data(posi, nega, channel=7, window_size=window_size)
                         train_bags1, X_test3, train_labels1, X_labels3 = sklearn.model_selection.train_test_split(
-                            train_bags1, train_labels1,random_state = 42, shuffle=True, test_size=0.1)
+                            train_bags1, train_labels1, random_state=42, shuffle=True, test_size=0.1)
 
                         train_bags2, X_test4, train_labels2, X_labels4 = sklearn.model_selection.train_test_split(
-                            train_bags2, train_labels2,random_state = 42, shuffle=True ,test_size=0.1)
+                            train_bags2, train_labels2, random_state=42, shuffle=True, test_size=0.1)
                         for k in range(10):
                             generation = k
                             print('generation %d' % (k))
@@ -1359,8 +1364,40 @@ def run_ideepe(parser):
                                                         num_filters=num_filters, motif=motif, motif_seqs=motif_seqs,
                                                         motif_outdir=motif_outdir)
 
-                                cpy(population[j][0], model_1.state_dict())
-                                cpy(population[j][1], model_2.state_dict())
+                                predict1 = predict_network(model_type, np.array(X_test3), channel=1,
+                                                           window_size=max_size + 6,
+                                                           model_file='tmp' + file_name + '.' + str(
+                                                               j) + '.' + model_file + '.global',
+                                                           batch_size=batch_size,
+                                                           n_epochs=n_epochs,
+                                                           num_filters=num_filters)
+                                predict2 = predict_network(model_type, np.array(X_test4), channel=7,
+                                                           window_size=window_size + 6,
+                                                           model_file='tmp' + file_name + '.' + str(
+                                                               j) + '.' + model_file + '.local',
+                                                           batch_size=batch_size,
+                                                           n_epochs=n_epochs,
+                                                           num_filters=num_filters)
+                                predict = (predict1 + predict2) / 2.0
+                                auc = roc_auc_score(X_labels4, predict)
+                                gg = []
+                                gg.append(auc)
+                                print(auc)
+                                print('population.fitness.values', population[j].fitness.values)
+                                os.remove('tmp' + file_name + '.' + str(
+                                    j) + '.' + model_file + '.global')
+                                os.remove('tmp' + file_name + '.' + str(
+                                    j) + '.' + model_file + '.local')
+                                if k == 0:
+                                    # print("1126")
+                                    population[j][0] = model_1.state_dict()
+                                    population[j][1] = model_2.state_dict()
+                                    population[j].fitness.values = gg
+                                elif auc > population[j].fitness.values:
+                                    # print("1125")
+                                    population[j][0] = model_1.state_dict()
+                                    population[j][1] = model_2.state_dict()
+                                    population[j].fitness.values = gg
                                 torch.cuda.empty_cache()
                             for v in range(kv):
                                 for ind in population:
@@ -1466,15 +1503,14 @@ def run_ideepe(parser):
 
                         del train_bags1, train_labels1
                         del train_bags2, train_labels2
-                        #del train_bags1_cp, X_test3, train_labels1_cp, X_labels3
-                        #del train_bags2_cp, X_test4, train_labels2_cp, X_labels4
+                        # del train_bags1_cp, X_test3, train_labels1_cp, X_labels3
+                        # del train_bags2_cp, X_test4, train_labels2_cp, X_labels4
                         del X_test3, X_labels3, X_test4, X_labels4
                         gc.collect()
                         torch.cuda.empty_cache()
                         f3.close()
                     f2.close()
                 f1.close()
-
             end_time = timeit.default_timer()
             print("Training final took: %.2f s" % (end_time - start_time))
 
@@ -1486,62 +1522,97 @@ def run_ideepe(parser):
                                       model_file=model_file, batch_size=batch_size, n_epochs=n_epochs,
                                       num_filters=num_filters)
         else:
+            print('haha')
+            posis = []
+            negas = []
             name = readname1()
             print(name)
-    
             cwd = os.getcwd()
             for tt in name:
                 if tt.find('ls') != -1:
-                    path = cwd + '/' + tt
-                    print(path)
-                    #tot = tot+1
-
-
-            t1 = posi.find('/')
-            t2 = posi.find('.')
-            file_name = posi[t1 + 1:t2]
-            auc1 = 0
-            predict1 = []
-            X_labels1 = []
-            for j in range(u):
+                    if tt.find('negatives') != -1:
+                        negas.append('GraphProt_CLIP_sequences' + '/' + tt)
+                    else:
+                        posis.append('GraphProt_CLIP_sequences' + '/' + tt)
+                    # print(path)
+                    # tot = tot+1
+            posis.sort()
+            negas.sort()
+            sum1 = 0
+            filenames = ['ALKBH5(AUC=0.768)',
+                         'C17ORF85(AUC=0.88)',
+                         'C22ORF28(AUC=0.869)',
+                         'CAPRIN1(AUC=0.912)',
+                         'Ago2(AUC=0.895)',
+                         'ELAVL1H(AUC=0.981)',
+                         'SFRS1(AUC=0.957)',
+                         'HNRNPC(AUC=0.983)',
+                         'TDP43(AUC=0.955)',
+                         'TIA1(AUC=0.95)',
+                         'TIAL1(AUC=0.944)',
+                         'Ago1-4(AUC=0.934)',
+                         'ELAVL1B(AUC=0.982)',
+                         'ELAVL1A(AUC=0.977)',
+                         'EWSR1(AUC=0.976)',
+                         'FUS(AUC=0.988)',
+                         'ELAVL1C(AUC=0.993)',
+                         'IGF2BP1-3(AUC=0.969)',
+                         'MOV10(AUC=0.94)',
+                         'PUM2(AUC=0.974)',
+                         'QKI(AUC=0.973)',
+                         'TAF15(AUC=0.982)',
+                         'PTB(AUC=0.954)',
+                         'ZC3H7B(AUC=0.92)'
+                         ]
+            auc233 = []
+            for gog in range(len(posis)):
+                posi = posis[gog]
+                nega = negas[gog]
+                t1 = posi.find('/')
+                t2 = posi.find('.')
+                file_name = posi[t1 + 1:t2]
                 X_test, X_labels = get_data(posi, nega, channel=1, window_size=max_size)
                 predict1 = predict_network(model_type, np.array(X_test), channel=1, window_size=max_size + 6,
-                                           model_file=file_name + '.' + str(j) + '.' + model_file + '.global',
+                                           model_file=file_name + '.' + 'best' + '.' + model_file + '.global',
                                            batch_size=batch_size,
                                            n_epochs=n_epochs,
                                            num_filters=num_filters)
                 X_test, X_labels = get_data(posi, nega, channel=7, window_size=window_size)
                 predict2 = predict_network(model_type, np.array(X_test), channel=7, window_size=window_size + 6,
-                                           model_file=file_name + '.' + str(j) + '.' + model_file + '.local',
+                                           model_file=file_name + '.' + 'best' + '.' + model_file + '.local',
                                            batch_size=batch_size,
                                            n_epochs=n_epochs,
                                            num_filters=num_filters)
-
                 predict = (predict1 + predict2) / 2.0
                 # print(X_labels)
+                ff = open("roc.txt", "w")
+                ff.write(str(predict))
+                ff.write(str(X_labels))
                 auc = roc_auc_score(X_labels, predict)
-                # print(auc)
-                if auc > auc1:
-                    auc1 = auc
-                    predict1 = predict.copy()
-                    X_labels1 = X_labels.copy()
-            print('auc1',auc1)
-            fpr, tpr, thresholds = metrics.roc_curve(X_labels1, predict1, pos_label=1)
-            plt.plot(fpr, tpr,label='AUC ')
+                auc233.append(auc)
+                sum1 = sum1 + auc
+                # if gog<12:
+                fpr, tpr, thresholds = metrics.roc_curve(X_labels, predict, pos_label=1)
+                # else:
+                #   fpr, tpr, thresholds = metrics.roc_curve(X_labels, predict, pos_label=2)
+                plt.plot(fpr, tpr, label=filenames[gog])
+            tt = len(posis)
+            print(auc233)
+            print('mean AUC', sum1 / tt)
             plt.legend(loc='lower right')
-# plt.plot([0, 1], [0, 1], 'r--')
-            plt.xlim([-0.1, 1.1])
-            plt.ylim([-0.1, 1.1])
-            plt.xlabel('False Positive Rate') #横坐标是fpr
-            plt.ylabel('True Positive Rate')  #纵坐标是tpr
-            plt.title('Receiver operating characteristic curve',FontProperties=font)
+            # plt.plot([0, 1], [0, 1], 'r--')
+            plt.xlim([0, 1])
+            plt.ylim([0, 1])
+            plt.xlabel('False Positive Rate')  # 横坐标是fpr
+            plt.ylabel('True Positive Rate')  # 纵坐标是tpr
+            plt.title(u' ', FontProperties=font)
+            # plt.figure(8,8)
+            plt.savefig('nondeep.png')
             plt.show()
-
-
-        # pdb.set_trace()
-        # print(X_labels)
-        # auc = roc_auc_score(X_labels, predict)
-        # print(auc)
+            # pdb.set_trace()
+            # print(X_labels)
+            # auc = roc_auc_score(X_labels, predict)
+            # print(auc)
         myprob = "\n".join(map(str, predict))
         fw.write(myprob)
         fw.close()
@@ -1597,4 +1668,3 @@ args = parse_arguments(parser)
 print(args)
 # model_type = sys.argv[1]
 run_ideepe(args)
-
