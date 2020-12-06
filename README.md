@@ -33,29 +33,25 @@ python edcnn.py [-h] [--posi <postive_sequecne_file>] <br>
                  [--num_filters NUM_FILTERS] [--n_epochs N_EPOCHS] <br>
                  
 # Use case:
-Take ALKBH5 as an example, if you want to predict the binding sites for RBP ALKBH5 using ensembling local and global CNNs, and the default model is ensembling model. <br>
-You first need train the model for RBP ALKBH5, then the trained model is used to predict binding probability of this RBP for your sequences. The follwoing CLI will train a ensembling model using local and global CNNs, which are trained using positves and negatives derived from CLIP-seq. <br>
+Take ALKBH5 as an example, if you want to predict the binding sites for RBP ALKBH5 using local and global CNNs <br>
 # step 1:
-1. python ideepe.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --nega=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.negatives.fa --model_type=CNN --model_file=model.pkl --train=True 
+1. python edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --nega=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.negatives.fa --model_type=CNN --model_file=model.pkl --train=True 
 <br>
-For ensembling models, it will save 'model.pkl.local' and 'model.pkl.global' for local and global CNNs, respectively.<br>
+Our propose EDCNN will save 'best.model.pkl.local' and 'best.model.pkl.global' for local and global CNNs, respectively.<br>
 
 # step 2:
-2. python ideepe.py --testfile=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --model_type=CNN --model_file=model.pkl --predict=True 
+2. python edcnn.py --testfile=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa --model_type=CNN --model_file=model.pkl --predict=True 
 <br>
-
-testfile is your input fasta sequences file, and the predicted outputs for all sequences will be defaulted saved in "prediction.txt". The value in each line corresponds to the probability of being RBP binding site for the sequence in fasta file. NOTE:if you have positive and negative sequecnes, please put them in the same sequecne file, which is fed into model for prediciton. DO NOT predict probability for positive and negative sequence seperately in two fasta files, then combine the prediction.
+predict step
 
 # Identify motifs:
 You need install WebLogo (http://weblogo.berkeley.edu/) and TOMTOM in MEME Suite(http://meme-suite.org/doc/download.html?man_type=web) to search identifyed motifs against known motifs of RBPs. And also you need has positive and negative sequences when using motif option. <br> 
 <br>
 # step 3:
-3. python ideepe.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --nega=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.negatives.fa --model_type=CNN --model_file=model.pkl --motif=True --motif_dir=motifs
+3. python ideepe.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa --model_type=CNN --model_file=model.pkl --motif=True --motif_dir=motifs
+# Calculate the mean values of AUCs
 
 The identified motifs (PWMs, and Weblogo) are saved to be defaulted dir motifs (you can also use --motif_dir to configure your dir for motifs), and also include the report from TOMTOM.
-
-# NOTE
-When you train iDeepE on your own constructed benchmark dataset, if the training loss cannot converge, may other optimization methods, like SGD or RMSprop can be used to replace Adam in the code. 
 
 # Contact
 yaweiwang : wangyw19@mails.jlu.edu.cn
