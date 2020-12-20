@@ -1327,14 +1327,22 @@ def run_ideepe(parser):
                         # global population
                         posi1 = 'GraphProt_CLIP_sequences/' + file_name + '.ls.positives.fa'
                         nega1 = 'GraphProt_CLIP_sequences/' + file_name + '.ls.negatives.fa'
-                        train_bags1, train_labels1 = get_data(posi, nega, channel=1, window_size=max_size)
+                        data = read_data_file(posi, nega, train=train)
+                        rna_seqs = data["seq"]
+                        labels = data["Y"]
+                        train_seqs, val_seqs, train_label, val_label = train_test_split(rna_seqs, labels,random_state=42, shuffle=True,
+                                                                                          test_size=0.1)
+                        data1 = dict()
+                        data1["seq"] = train_seqs
+                        data1["Y"] = train_label
+                        train_bags1, train_labels1 = get_bag_data_1_channel(data1, max_len=max_size)
+                        train_bags2, train_labels2 = get_bag_data(data1, channel=7, window_size=window_size)
 
-                        train_bags2, train_labels2 = get_data(posi, nega, channel=7, window_size=window_size)
-                        train_bags1, X_test3, train_labels1, X_labels3 = sklearn.model_selection.train_test_split(
-                            train_bags1, train_labels1, random_state=42, shuffle=True, test_size=0.1)
-
-                        train_bags2, X_test4, train_labels2, X_labels4 = sklearn.model_selection.train_test_split(
-                            train_bags2, train_labels2, random_state=42, shuffle=True, test_size=0.1)
+                        data2 = dict()
+                        data2["seq"] = val_seqs
+                        data2["Y"] = val_label
+                        X_test3,X_labels3 = get_bag_data_1_channel(data2, max_len=max_size)
+                        X_test4, X_labels4 = get_bag_data(data2, channel=7, window_size=window_size)
                         for k in range(10):
                             generation = k
                             print('generation %d' % (k))
