@@ -1330,7 +1330,7 @@ def run_ideepe(parser):
                         data = read_data_file(posi, nega, train=train)
                         rna_seqs = data["seq"]
                         labels = data["Y"]
-                        train_seqs, val_seqs, train_label, val_label = train_test_split(rna_seqs, labels,random_state=42, shuffle=True,
+                        train_seqs, val_seqs, train_label, val_label = train_test_split(rna_seqs, labels,random_state=42,
                                                                                           test_size=0.1)
                         data1 = dict()
                         data1["seq"] = train_seqs
