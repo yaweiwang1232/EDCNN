@@ -1,0 +1,15 @@
+AME (Analysis of Motif Enrichment): Compiled on Aug 12 2021 at 12:05:51
+------------------------------
+Copyright (c) Robert McLeay <r.mcleay@imb.uq.edu.au> & Timothy Bailey <t.bailey@imb.uq.edu.au>, 2009.
+
+Command line
+ame -o 1 /home/wangyawei/review/EDCNN/GraphProt_CLIP_sequences/PARCLIP_IGF2BP123.fa filters_meme.txt
+
+In partition maximization mode.
+
+Threshold p-value for reporting results: 0.05
+Motif p-values are corrected by #Motifs * #ThresholdsTested - (16 * 15377 = 246032)
+
+1. Fisher's exact test p-value of motif filter6  (CANCAWC) top 8573 seqs: 3.876e-11 (Corrected p-value: 9.535e-06)
+2. Fisher's exact test p-value of motif filter1  (WDKHUUA) top 8509 seqs: 1.977e-10 (Corrected p-value: 4.864e-05)
+3. Fisher's exact test p-value of motif filter15  (ACWUHAA) top 4886 seqs: 7.499e-09 (Corrected p-value: 0.001843)

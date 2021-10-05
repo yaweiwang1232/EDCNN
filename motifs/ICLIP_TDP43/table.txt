@@ -1,0 +1,17 @@
+               consensus  annotation     ic    mean     std
+0             CCAGACAGGU       CNOT4   3.82  0.1016  0.1528
+1             CAUUAGUCUA           .   2.96  0.1055  0.1577
+2             CGUCCACAUU           .   5.07  0.1087  0.1645
+3             CGGUACACCG           .   2.41  0.1117  0.1704
+4             CGCAAUGAGA           .   2.61  0.1113  0.1706
+5             CGGAAUGGAG           .   9.73  0.1106  0.1699
+6             UGAAAAUUGC           .   3.64  0.1112  0.1705
+7             CGCCGUUCUA           .   3.69  0.1113  0.1700
+8             GCAUAUGUCC           .   3.34  0.1111  0.1703
+9             UGAUGUGGUG        SFPQ   4.62  0.1112  0.1703
+10            GCACGCAUGC           .   4.42  0.1114  0.1706
+11            AGUUAUUCCA           .   3.08  0.1114  0.1706
+12            UGUCGAAGGG     HNRNPH2   2.51  0.1113  0.1703
+13            UUGAGCAGCC           .   4.31  0.1110  0.1703
+14            CUGCGAGCUA           .   2.78  0.1114  0.1702
+15            CAUGCGGACG           .   2.79  0.1114  0.1709

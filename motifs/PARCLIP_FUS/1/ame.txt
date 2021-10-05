@@ -1,0 +1,21 @@
+AME (Analysis of Motif Enrichment): Compiled on Aug 12 2021 at 12:05:51
+------------------------------
+Copyright (c) Robert McLeay <r.mcleay@imb.uq.edu.au> & Timothy Bailey <t.bailey@imb.uq.edu.au>, 2009.
+
+Command line
+ame -o 1 /home/wangyawei/review/EDCNN/GraphProt_CLIP_sequences/PARCLIP_FUS.fa filters_meme.txt
+
+In partition maximization mode.
+
+Threshold p-value for reporting results: 0.05
+Motif p-values are corrected by #Motifs * #ThresholdsTested - (16 * 66061 = 1056976)
+
+1. Fisher's exact test p-value of motif filter14  (WAHUUWA) top 34798 seqs: 0 (Corrected p-value: 0)
+2. Fisher's exact test p-value of motif filter13  (UWAHYHA) top 34576 seqs: 9.959e-166 (Corrected p-value: 1.053e-159)
+3. Fisher's exact test p-value of motif filter5  (DCADAWW) top 34557 seqs: 7.357e-146 (Corrected p-value: 7.776e-140)
+4. Fisher's exact test p-value of motif filter7  (HMHDGDD) top 34656 seqs: 4.464e-119 (Corrected p-value: 4.718e-113)
+5. Fisher's exact test p-value of motif filter1  (GHDDWDN) top 34511 seqs: 2.897e-38 (Corrected p-value: 3.062e-32)
+6. Fisher's exact test p-value of motif filter3  (AAAADDN) top 35301 seqs: 1.588e-32 (Corrected p-value: 1.678e-26)
+7. Fisher's exact test p-value of motif filter9  (UUUUKUK) top 35398 seqs: 1.475e-22 (Corrected p-value: 1.559e-16)
+8. Fisher's exact test p-value of motif filter8  (YHAAKBN) top 34666 seqs: 1.743e-12 (Corrected p-value: 1.843e-06)
+9. Fisher's exact test p-value of motif filter15  (MMWAARN) top 34706 seqs: 1.143e-11 (Corrected p-value: 1.208e-05)
