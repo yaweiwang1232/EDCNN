@@ -274,7 +274,7 @@ def evalFitness(ind, X, y, batch_size=32):
     return auc,
 
 
-def varOr1(population, toolbox, lambda_, cxpb, mutpb, generation):
+def generate_offspring(population, toolbox, lambda_, cxpb, mutpb, generation):
     offspring = []
     p = []
     for i in range(10):
@@ -717,7 +717,7 @@ def predict_network(model_type, X_test, channel=7, window_size=107, model_file='
     return pred
 
 
-def predict_networker(model_type, X_test, channel=7, window_size=107, individual=None, batch_size=100, n_epochs=50,
+def individual_evaluation(model_type, X_test, channel=7, window_size=107, individual=None, batch_size=100, n_epochs=50,
                       num_filters=16):
     print('model training for ', model_type)
     # nb_epos= 5
@@ -850,13 +850,13 @@ def runEDCNN(inter_pair_dict, rna_seq_dict, protein_list, new_pair):
             torch.cuda.empty_cache()
         for v in range(kv):
             for ind in population:
-                predict1 = predict_networker(model_type, np.array(val_bags1), channel=1,
+                predict1 = individual_evaluation(model_type, np.array(val_bags1), channel=1,
                                              window_size=max_size + 6,
                                              individual=ind[0],
                                              batch_size=batch_size,
                                              n_epochs=n_epochs,
                                              num_filters=num_filters)
-                predict2 = predict_networker(model_type, np.array(val_bags2), channel=7,
+                predict2 = individual_evaluation(model_type, np.array(val_bags2), channel=7,
                                              window_size=window_size + 6,
                                              individual=ind[1],
                                              batch_size=batch_size,
@@ -869,15 +869,15 @@ def runEDCNN(inter_pair_dict, rna_seq_dict, protein_list, new_pair):
                 ind.fitness.values = gg
                 torch.cuda.empty_cache()
             population.sort(key=fitscore, reverse=True)
-            offspring = varOr1(population, toolbox, 4 * u, cxpb, mutpb, k)
+            offspring = generate_offspring(population, toolbox, 4 * u, cxpb, mutpb, k)
             for ind in offspring:
-                predict1 = predict_networker(model_type, np.array(val_bags1), channel=1,
+                predict1 = individual_evaluation(model_type, np.array(val_bags1), channel=1,
                                              window_size=max_size + 6,
                                              individual=ind[0],
                                              batch_size=batch_size,
                                              n_epochs=n_epochs,
                                              num_filters=num_filters)
-                predict2 = predict_networker(model_type, np.array(val_bags2), channel=7,
+                predict2 = individual_evaluation(model_type, np.array(val_bags2), channel=7,
                                              window_size=window_size + 6,
                                              individual=ind[1],
                                              batch_size=batch_size,
@@ -954,9 +954,9 @@ def runEDCNN(inter_pair_dict, rna_seq_dict, protein_list, new_pair):
     torch.cuda.empty_cache()
 
 
-def run_mlcnn():
+def run_edcnn():
     runRBP47()
 
 
-run_mlcnn()
+run_edcnn()
 
