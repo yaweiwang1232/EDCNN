@@ -1,13 +1,27 @@
 # EDCNN:Identification of Genome-Wide RNA-binding Proteins Using Evolutionary Deep Convolutional Neural Network
 <br>
-The tool is developed for identification of genome-wide RNA-binding proteins using evolutionary deep convolutional neural network.<br>
-We propose
+RNA binding proteins (RBPs) are a group of proteins associated with RNA regulation and
+metabolism, and play an essential role in mediating the maturation, transport, localization and translation
+of RNA. Recently, Genome-wide RNA-binding event detection methods have been developed to predict
+RBPs. Unfortunately, the existing computational methods usually suffer some limitations, such as highdimensionality, data sparsity and low model performance.
+Deep convolution neural network has a useful advantage for solving high-dimensional and
+sparse data. To improve further the performance of deep convolution neural network, we propose
 evolutionary deep convolutional neural network (EDCNN) to identify protein-RNA interactions by
-synergizing evolutionary optimization with gradient descent to enhance deep conventional neural network.<br>
-In this package, we provides resources including: source codes, datasets, the EDCNN models, and usage examples. <br>
+synergizing evolutionary optimization with gradient descent to enhance deep conventional neural network.
+In particular, EDCNN combines evolutionary algorithms and different gradient descent models in a
+complementary algorithm, where the gradient descent and evolution steps can alternately optimize the
+RNA-binding event search. To validate the performance of EDCNN, an experiment is conducted on two
+large-scale CLIP-seq datasets, and results reveal that EDCNN provides superior performance to other
+state-of-the-art methods. Furthermore, time complexity analysis, parameter analysis and motif analysis
+are conducted to demonstrate the effectiveness of our proposed algorithm from several perspectives.
 
+<br>
+<br>
+In this package, we provides resources including: source codes, datasets, the EDCNN models, and usage examples. <br>
 The flowcharts of identification of genome-wide RNA-binding proteins using evolutionary deep convolutional neural network is as follows:<br>
+
 ![Image text](https://github.com/yaweiwang1232/EDCNN/blob/main/Architecture.png)
+
 ## Requirements:
 EDCNN is written in Python3 and requires the following dependencies to be installed: <br>
 + [PyTorch 1.8.1](http://pytorch.org/) <br>
@@ -60,7 +74,7 @@ python edcnn.py [-h] [--posi <postive_sequecne_file>]
                  
 ## Use case:
 
-### 1.train step:
+### 1.Train step:
 
 Train the model using postive_sequecne_file and negative_sequecne_file.<br>
 ```
@@ -76,7 +90,7 @@ python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positive
 <br>
 Our proposed EDCNN will autosave best.model.pkl.local and best.model.pkl.global for local and global CNNs. <br>
 
-### 2.predict step:
+### 2.Predict step:
 predict the binding probability for your sequences using best.model.pkl.local and best.model.pkl.global.
 ```
 python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.fa \
@@ -87,7 +101,7 @@ python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.ls.positives.f
                  --model_file=model.pkl \
                  --predict=True 
 ```
-### 3.detect motif step:
+### 3.Motif step:
 Identify the binding sequence motifs using best.model.pkl.local and best.model.pkl.global.
 ```
 python3 edcnn.py --posi=GraphProt_CLIP_sequences/ALKBH5_Baltz2012.train.positives.fa \
