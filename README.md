@@ -48,7 +48,8 @@ python3 -m pip install -r requirements.txt
 
 ## Data 
 For RBP-24, the training and testing data can be downloaded from http://www.bioinf.uni-freiburg.de/Software/GraphProt/GraphProt_CLIP_sequences.tar.bz2 and decompress it in current dir. It has 24 experiments of 21 RBPs.<br>
-The training and testing data of RBP47_Dataset, protein binding microarrays(PBM) data, and eclip data can be found in this Repositories.<br>
+The training and testing data of RBP47_Dataset, protein binding microarrays(PBM) data, and eCLIP data can be found in this Repositories.<br>
+The available eCLIP data were downloaded from ENCODE (Davis et al., 2018), containing 93 diverse RBPs in HepG2 and K562 cells.<br>
 All data has sequences and labels, and you can also get it from https://doi.org/10.6084/m9.figshare.16746514.v1
 easily.
 ## Usage:
