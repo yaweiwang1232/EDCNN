@@ -10,11 +10,12 @@ The flowcharts of identification of genome-wide RNA-binding proteins using evolu
 ![Image text](https://github.com/yaweiwang1232/EDCNN/blob/main/Architecture.png)
 ## Requirements:
 EDCNN is written in Python3 and requires the following dependencies to be installed: <br>
-+ [PyTorch](http://pytorch.org/) <br>
++ [PyTorch 1.8.1](http://pytorch.org/) <br>
 + [Sklearn](https://github.com/scikit-learn/scikit-learn)
-+ [deap](https://github.com/deap/deap)
-+ [numpy](http://numpy.org/)
-+ [weblogo](http://weblogo.berkeley.edu/)
++ [matplotlib 3.3.4](https://matplotlib.org/)
++ [numpy 1.16.2](http://numpy.org/)
++ [deap 1.3.1](https://github.com/deap/deap)
++ [weblogo 3.7.8](http://weblogo.berkeley.edu/)
 
 ## Installation
 We recommend you to build a python virtual environment with [Anaconda](https://docs.anaconda.com/anaconda/install/linux/). 
