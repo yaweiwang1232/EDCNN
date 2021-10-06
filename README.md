@@ -4,7 +4,7 @@ The tool is developed for identification of genome-wide RNA-binding proteins usi
 In this package, we provides resources including: source codes of the EDCNN model, usage examples. 
 
 The flowcharts of EDCNN is following:<br>
-
+![Image text](https://github.com/yaweiwang1232/EDCNN/blob/main/Architecture.png)
 ## Requirements:
 EDCNN is written in Python3 and requires the following dependencies to be installed: <br>
 + [PyTorch](http://pytorch.org/) <br>
