@@ -132,4 +132,4 @@ predict_network | Predicting using the best model
 
 ## Contact
 For questions, comments and concerns, please contact
-Yawei Wang(wangyw19@mails.jlu.edu.cn), Yuning Yang, and Xiangtao Li.
+Yawei Wang(wangyw19@mails.jlu.edu.cn), Yuning Yang(yangyn533@nenu.edu.cn), and Xiangtao Li(lixt314@jlu.edu.cn).
